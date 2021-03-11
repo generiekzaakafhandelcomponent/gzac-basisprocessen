@@ -1,0 +1,54 @@
+{
+    "display": "form",
+    "settings": {
+        "pdf": {
+            "id": "1ec0f8ee-6685-5d98-a847-26f67b67d6f0",
+            "src": "https://files.form.io/pdf/5692b91fd1028f01000407e3/file/1ec0f8ee-6685-5d98-a847-26f67b67d6f0"
+        }
+    },
+    "components": [
+        {
+            "label": "BSN",
+            "tableView": true,
+            "labelPosition": "left-left",
+            "key": "burger.bsn",
+            "type": "number",
+            "defaultValue": 123456789,
+            "input": true
+        },
+        {
+            "label": "Voornaam",
+            "tableView": true,
+            "labelPosition": "left-left",
+            "key": "burger.voornaam",
+            "type": "textfield",
+            "defaultValue": "Bart",
+            "input": true
+        },
+        {
+            "label": "Achternaam",
+            "tableView": true,
+            "labelPosition": "left-left",
+            "key": "burger.achternaam",
+            "type": "textfield",
+            "defaultValue": "Jansen",
+            "input": true
+        },
+        {
+            "label": "E-mail adres",
+            "tableView": true,
+            "labelPosition": "left-left",
+            "key": "burger.email",
+            "type": "email",
+            "defaultValue": "peter.koenen@ritense.com",
+            "input": true
+        },
+        {
+            "type": "button",
+            "label": "Aanvraag indienen",
+            "disableOnInvalid": true,
+            "input": true,
+            "tableView": false
+        }
+    ]
+}

@@ -1,0 +1,194 @@
+{
+    "$id": "aanvraag-individuele-inkomenstoeslag.schema",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Aanvraag Individuele Inkomenstoeslag",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "burger": {
+            "type": "object",
+            "description": "Aanvrager",
+            "properties": {
+                "bsn": {
+                    "type": "number",
+                    "description": "BSN"
+                },
+                "voornaam": {
+                    "type": "string",
+                    "description": "Voornaam"
+                },
+                "achternaam": {
+                    "type": "string",
+                    "description": "Achternaam"
+                },
+                "email": {
+                    "type": "string",
+                    "description": "E-mail adres"
+                },
+                "vermogen": {
+                    "type": "object",
+                    "description": "Vermogen",
+                    "properties": {
+                        "vermogenId": {
+                            "type": "string",
+                            "description": "Vermogen ID"
+                        },
+                        "brontype": {
+                            "type": "string",
+                            "description": "Bron type"
+                        },
+                        "vermogenscomponents": {
+                            "type": "array",
+                            "description": "Vermogenscomponents",
+                            "items": {
+                                "$ref": "#/definitions/vermogenscomponent"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "behandelaar": {
+            "type": "object",
+            "description": "Behandelaar",
+            "properties": {
+                "emailadres": {
+                    "type": "string",
+                    "description": "Emailadres"
+                },
+                "naam": {
+                    "type": "string",
+                    "description": "Naam"
+                },
+                "vastgesteldVermogen": {
+                    "type": "number",
+                    "description": "Vastgesteld vermogen"
+                }
+            }
+        }
+    },
+    "definitions": {
+        "vermogenscomponent": {
+            "type": "object",
+            "description": "VermogensComponent",
+            "properties": {
+                "vermogenstype": {
+                    "type": "string",
+                    "description": "Vermogenstype"
+                },
+                "id": {
+                    "type": "string",
+                    "description": "ID"
+                },
+                "brontype": {
+                    "type": "string",
+                    "description": "brontype"
+                },
+                "datum": {
+                    "type": "object",
+                    "description": "Datum",
+                    "properties": {
+                        "vaststelling": {
+                            "type": "string",
+                            "description": "Datum vaststelling"
+                        },
+                        "aanspraak": {
+                            "type": "string",
+                            "description": "Datum aanspraak"
+                        }
+                    }
+                },
+                "codeSoort": {
+                    "type": "string",
+                    "description": "Code soort"
+                },
+                "waarde": {
+                    "type": "string",
+                    "description": "Waarde"
+                },
+                "bijgevoegdBewijs": {
+                    "type": "string",
+                    "description": "Bijgevoegd bewijs"
+                },
+                "linkNaarBewijs": {
+                    "type": "string",
+                    "description": "Link naar bewijs"
+                },
+                "BankSaldo": {
+                    "type": "object",
+                    "description": "Bank saldo",
+                    "properties": {
+                        "bedrag": {
+                            "type": "string",
+                            "description": "Bedrag"
+                        },
+                        "peilmoment": {
+                            "type": "string",
+                            "description": "Peilmoment"
+                        },
+                        "bankrekening": {
+                            "type": "object",
+                            "$ref": "#/definitions/bankrekening"
+                        }
+                    }
+                }
+            }
+        },
+        "bankrekening": {
+            "type": "object",
+            "description": "Bankrekening",
+            "properties": {
+                "bankrekeningId": {
+                    "type": "string",
+                    "description": "Bankrekening ID"
+                },
+                "bankrekeningnummer": {
+                    "type": "string",
+                    "description": "Bankrekeningnummer"
+                },
+                "bic": {
+                    "type": "string",
+                    "description": "BIC"
+                },
+                "iban": {
+                    "type": "string",
+                    "description": "IBAN"
+                },
+                "landcodeIso": {
+                    "type": "string",
+                    "description": "Landcode ISO"
+                },
+                "banknaam": {
+                    "type": "string",
+                    "description": "Bank naam"
+                },
+                "tenaamstelling": {
+                    "type": "string",
+                    "description": "Tenaamstelling"
+                },
+                "voorkeurBankrekening": {
+                    "type": "string",
+                    "description": "Voorkeur bankrekening"
+                },
+                "datum": {
+                    "type": "object",
+                    "description": "Datum",
+                    "properties": {
+                        "aanvangBankrekening": {
+                            "type": "string",
+                            "description": "Datum aanvang bankrekening"
+                        },
+                        "eindeBankrekening": {
+                            "type": "string",
+                            "description": "Datum einde bankrekening"
+                        }
+                    }
+                },
+                "brontype": {
+                    "type": "string",
+                    "description": "Bron type"
+                }
+            }
+        }
+    }
+}

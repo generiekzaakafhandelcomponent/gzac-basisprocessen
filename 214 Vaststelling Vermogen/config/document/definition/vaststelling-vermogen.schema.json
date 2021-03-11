@@ -1,0 +1,537 @@
+{
+    "$id": "vaststelling-vermogen.schema",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Vaststelling vermogen",
+    "type": "object",
+    "additionalProperties": false,
+    "availableInPortaal": false,
+    "properties": {
+        "burger": {
+            "type": "object",
+            "description": "Burger",
+            "properties": {
+                "bsn": {
+                    "type": "number",
+                    "description": "BSN"
+                },
+                "voornaam": {
+                    "type": "string",
+                    "description": "Voornaam"
+                },
+                "achternaam": {
+                    "type": "string",
+                    "description": "Achternaam"
+                },
+                "email": {
+                    "type": "string",
+                    "description": "E-mail adres"
+                },
+                "autos": {
+                    "type": "array",
+                    "description": "Autos",
+                    "items": {
+                        "$ref": "#/definitions/autos"
+                    }
+                },
+                "caraven": {
+                    "type": "object",
+                    "description": "Caravan",
+                    "$ref": "#/definitions/bezitting"
+                },
+                "antiek": {
+                    "type": "object",
+                    "description": "Antiek",
+                    "$ref": "#/definitions/bezitting"
+                },
+                "sieraden": {
+                    "type": "object",
+                    "description": "Sieraden",
+                    "$ref": "#/definitions/bezitting"
+                },
+                "contanten": {
+                    "type": "object",
+                    "description": "Contanten",
+                    "$ref": "#/definitions/bezitting"
+                },
+                "waardepapieren": {
+                    "type": "object",
+                    "description": "Waardepapieren",
+                    "$ref": "#/definitions/bezitting"
+                },
+                "overigeBezittingen": {
+                    "type": "object",
+                    "description": "Overige bezittingen",
+                    "$ref": "#/definitions/bezitting"
+                },
+                "bankrekeningen": {
+                    "type": "array",
+                    "description": "Bankrekeningen",
+                    "items": {
+                        "$ref": "#/definitions/bankrekeningen"
+                    }
+                },
+                "uitstaandeLeningen": {
+                    "type": "array",
+                    "description": "Uitstaande leningen",
+                    "items": {
+                        "$ref": "#/definitions/uitstaandeLeningen"
+                    }
+                },
+                "schulden": {
+                    "type": "array",
+                    "description": "Schulden",
+                    "items": {
+                        "$ref": "#/definitions/schulden"
+                    }
+                },
+                "vermogenscomponenten": {
+                    "type": "string",
+                    "description": "Vermogens componenten",
+                    "enum": [
+                        "CONTANTEN",
+                        "BANK_GIROREKENING",
+                        "WAARDEPAPIEREN",
+                        "MOTORVOERTUIGEN",
+                        "CARAVANS",
+                        "ANTIEK_SIERADEN",
+                        "OVERIGE_BEZITTINGEN",
+                        "LENINGEN_AAN_DERDEN",
+                        "SCHULDEN"
+                    ]
+                },
+                "timer": {
+                    "type": "object",
+                    "description": "Timer",
+                    "properties": {
+                        "aanvullenGegevens": {
+                            "type": "string",
+                            "description": "Timer aanvullen gegevens"
+                        },
+                        "leverenBewijslast": {
+                            "type": "string",
+                            "description": "Leveren bewijslast"
+                        }
+                    }
+                },
+                "vermogen": {
+                    "type": "object",
+                    "description": "Vermogen",
+                    "properties": {
+                        "vermogenId": {
+                            "type": "string",
+                            "description": "Vermogen ID"
+                        },
+                        "brontype": {
+                            "type": "string",
+                            "description": "Bron type"
+                        },
+                        "vermogenscomponents": {
+                            "type": "array",
+                            "description": "Vermogenscomponents",
+                            "items": {
+                                "$ref": "#/definitions/vermogenscomponent"
+                            }
+                        }
+                    }
+                },
+                "documentIdAanvraag": {
+                    "type": "string",
+                    "description": "DocumentId Aanvraag"
+                }
+            }
+        },
+        "behandelaar": {
+            "type": "object",
+            "description": "Behandelaar",
+            "properties": {
+                "emailadres": {
+                    "type": "string",
+                    "description": "Emailadres"
+                },
+                "naam": {
+                    "type": "string",
+                    "description": "Naam"
+                }
+            }
+        },
+        "bewijslastNodig": {
+            "type": "boolean",
+            "description": "Bewijslast nodig"
+        },
+        "nietToereikend": {
+            "type": "boolean",
+            "description": "Bewijslast nodig"
+        },
+        "vastgesteldVermogen": {
+            "type": "number",
+            "description": "Vastgesteld vermogen"
+        },
+        "nogmaalsBurgerOmBewijslastVragen": {
+            "type": "boolean",
+            "description": "Burger nogmaals om bewijslast vragen?"
+        },
+        "aanleveringCompleet": {
+            "type": "boolean",
+            "description": "Aanlevering compleet?"
+        },
+        "aanleveringCompleetToelichting": {
+            "type": "string",
+            "description": "Toelichting bij aanlevering niet compleet"
+        }
+    },
+    "definitions": {
+        "autos": {
+            "type": "object",
+            "properties": {
+                "merk": {
+                    "type": "string",
+                    "description": "Merk"
+                },
+                "model": {
+                    "type": "string",
+                    "description": "Model"
+                },
+                "kenteken": {
+                    "type": "string",
+                    "description": "Kenteken"
+                },
+                "eigenaarschap": {
+                    "type": "boolean",
+                    "description": "Eigenaarschap"
+                },
+                "reden": {
+                    "type": "string",
+                    "description": "Reden"
+                },
+                "waarde": {
+                    "type": "number",
+                    "description": "Waarde"
+                },
+                "waardeBehandelaar": {
+                    "type": "number",
+                    "description": "Waarde"
+                },
+                "bewijslastNodig": {
+                    "type": "boolean",
+                    "description": "Bewijslast nodig"
+                },
+                "nietToereikend": {
+                    "type": "boolean",
+                    "description": "Niet toereikend",
+                    "default": false
+                },
+                "nietToereikendToelichting": {
+                    "type": "string",
+                    "description": "Toelichting"
+                },
+                "bijlagen": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "formio-file.schema.json"
+
+                    }
+                }
+            }
+        },
+        "bezitting": {
+            "type": "object",
+            "properties": {
+                "inBezit": {
+                    "type": "boolean",
+                    "description": "In bezit"
+                },
+                "waarde": {
+                    "type": "number",
+                    "description": "Waarde"
+                },
+                "waardeBehandelaar": {
+                    "type": "number",
+                    "description": "Waarde"
+                },
+                "bewijslastNodig": {
+                    "type": "boolean",
+                    "description": "Bewijslast nodig"
+                },
+                "nietToereikend": {
+                    "type": "boolean",
+                    "description": "Niet toereikend",
+                    "default": false
+                },
+                "nietToereikendToelichting": {
+                    "type": "string",
+                    "description": "Toelichting"
+                },
+                "bijlagen": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "formio-file.schema.json"
+
+                    }
+                }
+            }
+        },
+        "bankrekeningen": {
+            "type": "object",
+            "properties": {
+                "iban": {
+                    "type": "string",
+                    "description": "IBAN"
+                },
+                "tenaamstelling": {
+                    "type": "string",
+                    "description": "Tenaamstelling"
+                },
+                "huidigSaldo": {
+                    "type": "number",
+                    "description": "Huidig saldo"
+                },
+                "voorkeurBankrekening": {
+                    "type": "boolean",
+                    "description": "Voorkeur bankrekening"
+                },
+                "buitenlandseRekening": {
+                    "type": "boolean",
+                    "description": "Buitenlandse rekening"
+                },
+                "bicCode": {
+                    "type": "string",
+                    "description": "BIC Code"
+                },
+                "waardeBehandelaar": {
+                    "type": "number",
+                    "description": "Waarde"
+                },
+                "bewijslastNodig": {
+                    "type": "boolean",
+                    "description": "Bewijslast nodig"
+                },
+                "nietToereikend": {
+                    "type": "boolean",
+                    "description": "Niet toereikend",
+                    "default": false
+                },
+                "nietToereikendToelichting": {
+                    "type": "string",
+                    "description": "Toelichting"
+                },
+                "bijlagen": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "formio-file.schema.json"
+
+                    }
+                }
+            }
+        },
+        "uitstaandeLeningen": {
+            "type": "object",
+            "properties": {
+                "naam": {
+                    "type": "string",
+                    "description": "Naam"
+                },
+                "uitgeleendBedrag": {
+                    "type": "number",
+                    "description": "Uitgeleend bedrag"
+                },
+                "waardeBehandelaar": {
+                    "type": "number",
+                    "description": "Waarde"
+                },
+                "bewijslastNodig": {
+                    "type": "boolean",
+                    "description": "Bewijslast nodig"
+                },
+                "nietToereikend": {
+                    "type": "boolean",
+                    "description": "Niet toereikend",
+                    "default": false
+                },
+                "nietToereikendToelichting": {
+                    "type": "string",
+                    "description": "Toelichting"
+                },
+                "bijlagen": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "formio-file.schema.json"
+
+                    }
+                }
+            }
+        },
+        "schulden": {
+            "type": "object",
+            "properties": {
+                "naamSchuldeiser": {
+                    "type": "string",
+                    "description": "Naam schuldeiser"
+                },
+                "openstaandeSchuld": {
+                    "type": "number",
+                    "description": "Openstaande schuld"
+                },
+                "waardeBehandelaar": {
+                    "type": "number",
+                    "description": "Waarde"
+                },
+                "bewijslastNodig": {
+                    "type": "boolean",
+                    "description": "Bewijslast nodig"
+                },
+                "nietToereikend": {
+                    "type": "boolean",
+                    "description": "Niet toereikend",
+                    "default": false
+                },
+                "nietToereikendToelichting": {
+                    "type": "string",
+                    "description": "Toelichting"
+                },
+                "bijlagen": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "formio-file.schema.json"
+
+                    }
+                }
+            }
+        },
+        "vermogenscomponent": {
+            "type": "object",
+            "description": "VermogensComponent",
+            "properties": {
+                "vermogenstype": {
+                    "type": "string",
+                    "description": "Vermogenstype"
+                },
+                "id": {
+                    "type": "string",
+                    "description": "ID"
+                },
+                "brontype": {
+                    "type": "string",
+                    "description": "brontype"
+                },
+                "datum": {
+                    "type": "object",
+                    "description": "Datum",
+                    "properties": {
+                        "vaststelling": {
+                            "type": "string",
+                            "description": "Datum vaststelling"
+                        },
+                        "aanspraak": {
+                            "type": "string",
+                            "description": "Datum aanspraak"
+                        }
+                    }
+                },
+                "codeSoort": {
+                    "type": "string",
+                    "description": "Code soort"
+                },
+                "waarde": {
+                    "type": "string",
+                    "description": "Waarde"
+                },
+                "bijgevoegdBewijs": {
+                    "type": "string",
+                    "description": "Bijgevoegd bewijs"
+                },
+                "linkNaarBewijs": {
+                    "type": "string",
+                    "description": "Link naar bewijs"
+                },
+                "BankSaldo": {
+                    "type": "object",
+                    "description": "Bank saldo",
+                    "properties": {
+                        "bedrag": {
+                            "type": "string",
+                            "description": "Bedrag"
+                        },
+                        "peilmoment": {
+                            "type": "string",
+                            "description": "Peilmoment"
+                        },
+                        "bankrekening": {
+                            "type": "object",
+                            "$ref": "#/definitions/bankrekening"
+                        }
+                    }
+                }
+            }
+        },
+        "bankrekening": {
+            "type": "object",
+            "description": "Bankrekening",
+            "properties": {
+                "bankrekeningId": {
+                    "type": "string",
+                    "description": "Bankrekening ID"
+                },
+                "bankrekeningnummer": {
+                    "type": "string",
+                    "description": "Bankrekeningnummer"
+                },
+                "bic": {
+                    "type": "string",
+                    "description": "BIC"
+                },
+                "iban": {
+                    "type": "string",
+                    "description": "IBAN"
+                },
+                "landcodeIso": {
+                    "type": "string",
+                    "description": "Landcode ISO"
+                },
+                "banknaam": {
+                    "type": "string",
+                    "description": "Bank naam"
+                },
+                "tenaamstelling": {
+                    "type": "string",
+                    "description": "Tenaamstelling"
+                },
+                "voorkeurBankrekening": {
+                    "type": "string",
+                    "description": "Voorkeur bankrekening"
+                },
+                "datum": {
+                    "type": "object",
+                    "description": "Datum",
+                    "properties": {
+                        "aanvangBankrekening": {
+                            "type": "string",
+                            "description": "Datum aanvang bankrekening"
+                        },
+                        "eindeBankrekening": {
+                            "type": "string",
+                            "description": "Datum einde bankrekening"
+                        }
+                    }
+                },
+                "brontype": {
+                    "type": "string",
+                    "description": "Bron type"
+                }
+            }
+        },
+        "test": {
+            "type" : "object",
+            "properties": {
+                "stemResultaat" : {
+                    "type" : "string",
+                    "description" : "Wat heeft het initiatiefraadslid gestemd?"
+                },
+                "stemToelichting" : {
+                    "type" : "string",
+                    "description" : "Toelichting op stem van initiatiefraadslid"
+                }
+            }
+        }
+    }
+}
+

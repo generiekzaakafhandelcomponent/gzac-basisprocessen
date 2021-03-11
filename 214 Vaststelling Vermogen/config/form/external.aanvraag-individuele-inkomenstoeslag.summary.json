@@ -1,0 +1,63 @@
+{
+    "display": "form",
+    "settings": {
+        "pdf": {
+            "id": "1ec0f8ee-6685-5d98-a847-26f67b67d6f0",
+            "src": "https://files.form.io/pdf/5692b91fd1028f01000407e3/file/1ec0f8ee-6685-5d98-a847-26f67b67d6f0"
+        }
+    },
+    "components": [
+        {
+            "title": "Persoonsgegevens",
+            "tableView": false,
+            "key": "burger",
+            "type": "container",
+            "input": true,
+            "components": [
+                {
+                    "label": "HTML",
+                    "content": "<h4>Persoonsgegevens</h4>\n<section>\n    <dl class=\"row mb-0\">\n        <dd class=\"col-4\">BSN</dd>\n        <dt class=\"col-8\">{{ data.burger.bsn || '-' }}</dt>\n    </dl>\n    <dl class=\"row mb-0\">\n        <dd class=\"col-4\">Voornaam</dd>\n        <dt class=\"col-8\">{{ data.burger.voornaam || '-' }}</dt>\n    </dl>\n    <dl class=\"row mb-0\">\n        <dd class=\"col-4\">Achternaam</dd>\n        <dt class=\"col-8\">{{ data.burger.achternaam || '-' }}</dt>\n    </dl>\n    <dl class=\"row mb-0\">\n        <dd class=\"col-4\">E-mail adres</dd>\n        <dt class=\"col-8\">{{ data.burger.email || '-' }}</dt>\n    </dl>\n</section>",
+                    "tableView": false,
+                    "tag": "div",
+                    "key": "html",
+                    "type": "htmlelement",
+                    "input": true
+                }
+            ]
+        },
+        {
+            "label": "HTML",
+            "content": "<br/>",
+            "tableView": false,
+            "tag": "div",
+            "key": "htmlSpacer",
+            "type": "htmlelement",
+            "input": true
+        },
+        {
+            "title": "<strong>Vastgesteld vermogen</strong>",
+            "tableView": false,
+            "key": "autos",
+            "type": "container",
+            "input": true,
+            "components": [
+                {
+                    "label": "HTML",
+                    "content": "<h4>Vastgesteld vermogen</h4>\n<section>\n    <dl class=\"row mb-0\">\n        <dd class=\"col-4\">Vastgesteld vermogen</dd>\n        <dt class=\"col-8\">{{ data.behandelaar.vastgesteldVermogen || 'Nog geen vermogen vastgesteld' }}</dt>\n    </dl>\n</section>",
+                    "tableView": false,
+                    "tag": "div",
+                    "key": "html",
+                    "type": "htmlelement",
+                    "input": true
+                }
+            ]
+        },
+        {
+            "label": "behandelaar.vastgesteldVermogen",
+            "key": "behandelaar.vastgesteldVermogen",
+            "type": "hidden",
+            "input": true,
+            "tableView": false
+        }
+    ]
+}

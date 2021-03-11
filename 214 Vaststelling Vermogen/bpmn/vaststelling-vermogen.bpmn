@@ -1,0 +1,550 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.4.0" camunda:diagramRelationId="cd1e2c0d-91c3-4efb-a1e4-92532d72b31a">
+  <bpmn:collaboration id="Collaboration_1yliuxr">
+    <bpmn:participant id="VaststellingVermogenParticipant" name="Vaststelling vermogen" processRef="vaststellingVermogen" />
+  </bpmn:collaboration>
+  <bpmn:process id="vaststellingVermogen" name="Vaststelling vermogen" isExecutable="true">
+    <bpmn:laneSet id="LaneSet_0j3ggrt">
+      <bpmn:lane id="BurgerLane" name="Burger">
+        <bpmn:flowNodeRef>RegistreerTimerTask</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>VerstuurTaakHerrinneringTask</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_0wdi6gh</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_16k4v4r</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>LeverenBewijslastTask</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>RegistreerTimerTask1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>VerstuurTaakHerrinneringTask1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_1d3hph5</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_1hmayq4</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>AanvullenGegevensTask</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_0335wda</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_1apqujp</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_03yvbii</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_0wwtmlv</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="ProfessionalLane" name="Professional">
+        <bpmn:flowNodeRef>OphalenVoertuigenObvBSNTask</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>VaststellingVermogenStartEvent</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>BeoordeelAdviesTask</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>BewijslastNodigGateway</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_1qinulf</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>AanleveringCompleetGateway</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>VaststellenVermogenTask</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>AanleveringToereikendGateway</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_0k01icb</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>BeoordeelBewijsstukkenTask</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>AdviesVaststellingVermogenTask</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>VermogenNietVastTeStellenEndEvent</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>VermogenVastgesteldEndEvent</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:serviceTask id="OphalenVoertuigenObvBSNTask" name="Ophalen voertuigen o.b.v. BSN" camunda:expression="${vaststellingVermogenService.getVehicleDetails(execution)}">
+      <bpmn:extensionElements>
+        <camunda:executionListener expression="${execution.setVariable(&#34;burger&#34;,documentVariableDelegate.findValueByJsonPointer(&#34;/burger/email&#34;,execution))}" event="end" />
+        <camunda:executionListener expression="${execution.setVariable(&#34;voornaam&#34;,documentVariableDelegate.findValueByJsonPointer(&#34;/burger/voornaam&#34;,execution))}" event="end" />
+        <camunda:executionListener expression="${execution.setVariable(&#34;achternaam&#34;,documentVariableDelegate.findValueByJsonPointer(&#34;/burger/achternaam&#34;,execution))}" event="end" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0o1vhwp</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ckj9al</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="RegistreerTimerTask" name="Registreer Timer" camunda:expression="${vaststellingVermogenService.registerAanvullenGegevensTimer(execution)}">
+      <bpmn:incoming>Flow_02svovg</bpmn:incoming>
+      <bpmn:outgoing>Flow_1xl8nyz</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sendTask id="VerstuurTaakHerrinneringTask" name="Verstuur taak herrinnering" camunda:expression="${mailService.sendElementTemplateTaskMail(execution)}">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="mailSendTaskAttachments" />
+          <camunda:property name="mailSendTaskFrom" value="valtimo@ritense.com" />
+          <camunda:property name="mailSendTaskTemplate" value="aanvullen-gegevens-voor-vaststelling-vermogen-herinnering" />
+          <camunda:property name="mailSendTaskSubject" value="Herinnering aanvullen gegevens voor vaststelling vermogen" />
+          <camunda:property name="mailSendTaskTo" value="${burger}" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0ziyakd</bpmn:incoming>
+      <bpmn:outgoing>Flow_1sr542n</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:exclusiveGateway id="Gateway_0wdi6gh">
+      <bpmn:incoming>Flow_1xl8nyz</bpmn:incoming>
+      <bpmn:incoming>Flow_09nljtm</bpmn:incoming>
+      <bpmn:outgoing>Flow_164xke5</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="Event_16k4v4r">
+      <bpmn:incoming>Flow_1sr542n</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="NeeSequenceFlow2" name="Nee" sourceRef="AanleveringToereikendGateway" targetRef="Gateway_0k01icb">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${nietToereikend}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_10dmagn" sourceRef="Gateway_0k01icb" targetRef="LeverenBewijslastTask" />
+    <bpmn:sequenceFlow id="JaSequenceFlow2" name="Ja" sourceRef="AanleveringToereikendGateway" targetRef="Gateway_1qinulf" />
+    <bpmn:sequenceFlow id="Flow_19ryt9n" sourceRef="RegistreerTimerTask1" targetRef="Gateway_1d3hph5" />
+    <bpmn:sequenceFlow id="Flow_1vfbxxs" sourceRef="Gateway_1d3hph5" targetRef="BeoordeelBewijsstukkenTask" />
+    <bpmn:sequenceFlow id="Flow_09dss0m" sourceRef="Event_0wwtmlv" targetRef="RegistreerTimerTask1" />
+    <bpmn:sequenceFlow id="Flow_1xl8nyz" sourceRef="RegistreerTimerTask" targetRef="Gateway_0wdi6gh" />
+    <bpmn:sequenceFlow id="Flow_02svovg" sourceRef="Event_0335wda" targetRef="RegistreerTimerTask" />
+    <bpmn:sequenceFlow id="Flow_1ckj9al" sourceRef="OphalenVoertuigenObvBSNTask" targetRef="AanvullenGegevensTask" />
+    <bpmn:sequenceFlow id="Flow_09nljtm" sourceRef="AanvullenGegevensTask" targetRef="Gateway_0wdi6gh" />
+    <bpmn:sequenceFlow id="JaSequenceFlow1" name="Ja" sourceRef="BewijslastNodigGateway" targetRef="Gateway_0k01icb">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${bewijslastNodig}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0o1vhwp" sourceRef="VaststellingVermogenStartEvent" targetRef="OphalenVoertuigenObvBSNTask" />
+    <bpmn:sequenceFlow id="Flow_09myoxe" sourceRef="AdviesVaststellingVermogenTask" targetRef="BeoordeelAdviesTask" />
+    <bpmn:sequenceFlow id="Flow_1ce723h" sourceRef="BeoordeelAdviesTask" targetRef="BewijslastNodigGateway" />
+    <bpmn:sequenceFlow id="NeeSequenceFlow1" name="Nee" sourceRef="BewijslastNodigGateway" targetRef="Gateway_1qinulf" />
+    <bpmn:sequenceFlow id="Flow_1odk6a4" sourceRef="Gateway_1qinulf" targetRef="AanleveringCompleetGateway" />
+    <bpmn:sequenceFlow id="Flow_1094pl9" sourceRef="VaststellenVermogenTask" targetRef="VermogenVastgesteldEndEvent" />
+    <bpmn:sequenceFlow id="Flow_156ahf8" sourceRef="LeverenBewijslastTask" targetRef="Gateway_1d3hph5" />
+    <bpmn:sequenceFlow id="Flow_0v72iyb" sourceRef="BeoordeelBewijsstukkenTask" targetRef="AanleveringToereikendGateway" />
+    <bpmn:sequenceFlow id="JaSequenceFlow" name="Ja" sourceRef="AanleveringCompleetGateway" targetRef="VaststellenVermogenTask" />
+    <bpmn:sequenceFlow id="NeeSequenceFlow" name="Nee" sourceRef="AanleveringCompleetGateway" targetRef="VermogenNietVastTeStellenEndEvent">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!aanleveringCompleet}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0ziyakd" sourceRef="Event_1apqujp" targetRef="VerstuurTaakHerrinneringTask" />
+    <bpmn:sequenceFlow id="Flow_1sr542n" sourceRef="VerstuurTaakHerrinneringTask" targetRef="Event_16k4v4r" />
+    <bpmn:sequenceFlow id="Flow_1qued4o" sourceRef="Event_03yvbii" targetRef="VerstuurTaakHerrinneringTask1" />
+    <bpmn:sequenceFlow id="Flow_0fkfujz" sourceRef="VerstuurTaakHerrinneringTask1" targetRef="Event_1hmayq4" />
+    <bpmn:startEvent id="VaststellingVermogenStartEvent" name="BSN">
+      <bpmn:outgoing>Flow_0o1vhwp</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0n86seh" messageRef="Message_1ijf08e" />
+    </bpmn:startEvent>
+    <bpmn:userTask id="BeoordeelAdviesTask" name="Beoordeel advies" camunda:asyncAfter="true" camunda:candidateGroups="ROLE_USER">
+      <bpmn:extensionElements>
+        <camunda:executionListener expression="${vermogensComponentService.addVermogensComponents(execution, &#34;Medewerker&#34;)}" event="end" />
+        <camunda:executionListener expression="${bewijslastNodigService.determineBewijslastNodig(execution)}" event="end" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_09myoxe</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ce723h</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="BewijslastNodigGateway" name="Bewijslast nodig?" default="NeeSequenceFlow1">
+      <bpmn:extensionElements>
+        <camunda:executionListener expression="${execution.setVariable(&#34;bewijslastNodig&#34;,documentVariableDelegate.findValueByJsonPointer(&#34;/bewijslastNodig&#34;,execution))}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1ce723h</bpmn:incoming>
+      <bpmn:outgoing>NeeSequenceFlow1</bpmn:outgoing>
+      <bpmn:outgoing>JaSequenceFlow1</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="Gateway_1qinulf">
+      <bpmn:incoming>NeeSequenceFlow1</bpmn:incoming>
+      <bpmn:incoming>JaSequenceFlow2</bpmn:incoming>
+      <bpmn:outgoing>Flow_1odk6a4</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="AanleveringCompleetGateway" name="Aanlevering compleet?" default="JaSequenceFlow">
+      <bpmn:extensionElements>
+        <camunda:executionListener expression="${execution.setVariable(&#34;aanleveringCompleet&#34;,documentVariableDelegate.findValueByJsonPointer(&#34;/aanleveringCompleet&#34;,execution))}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1odk6a4</bpmn:incoming>
+      <bpmn:outgoing>JaSequenceFlow</bpmn:outgoing>
+      <bpmn:outgoing>NeeSequenceFlow</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="VaststellenVermogenTask" name="Vaststellen vermogen" camunda:asyncBefore="true" camunda:expression="${vaststellingVermogenService.passJsonNodeToAnotherDocument(execution)}">
+      <bpmn:extensionElements>
+        <camunda:executionListener expression="${vermogensComponentService.getTotalVastgesteldVermogen(execution)}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>JaSequenceFlow</bpmn:incoming>
+      <bpmn:outgoing>Flow_1094pl9</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="AanleveringToereikendGateway" name="Aanlevering toereikend?" default="JaSequenceFlow2">
+      <bpmn:extensionElements>
+        <camunda:executionListener expression="${execution.setVariable(&#34;nietToereikend&#34;,documentVariableDelegate.findValueByJsonPointer(&#34;/nietToereikend&#34;,execution))}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0v72iyb</bpmn:incoming>
+      <bpmn:outgoing>JaSequenceFlow2</bpmn:outgoing>
+      <bpmn:outgoing>NeeSequenceFlow2</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="Gateway_0k01icb">
+      <bpmn:incoming>JaSequenceFlow1</bpmn:incoming>
+      <bpmn:incoming>NeeSequenceFlow2</bpmn:incoming>
+      <bpmn:outgoing>Flow_10dmagn</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="LeverenBewijslastTask" name="Leveren bewijslast" camunda:assignee="${burger}" camunda:candidateGroups="ROLE_ADMIN">
+      <bpmn:extensionElements>
+        <camunda:executionListener expression="${mailService.sendElementTemplateTaskMail(execution)}" event="start" />
+        <camunda:properties>
+          <camunda:property name="mailSendTaskAttachments" />
+          <camunda:property name="mailSendTaskFrom" value="valtimo@ritense.com" />
+          <camunda:property name="mailSendTaskTemplate" value="leveren-bewijslast" />
+          <camunda:property name="mailSendTaskSubject" value="Leveren bewijslast" />
+          <camunda:property name="mailSendTaskTo" value="${burger}" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_10dmagn</bpmn:incoming>
+      <bpmn:outgoing>Flow_156ahf8</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="RegistreerTimerTask1" name="Registreer Timer" camunda:expression="${vaststellingVermogenService.registerLeverenBewijslastTimer(execution)}">
+      <bpmn:incoming>Flow_09dss0m</bpmn:incoming>
+      <bpmn:outgoing>Flow_19ryt9n</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sendTask id="VerstuurTaakHerrinneringTask1" name="Verstuur taak herrinnering" camunda:expression="${mailService.sendElementTemplateTaskMail(execution)}">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="mailSendTaskAttachments" />
+          <camunda:property name="mailSendTaskFrom" value="valtimo@ritense.com" />
+          <camunda:property name="mailSendTaskTemplate" value="aanvullen-gegevens-voor-vaststelling-vermogen-herinnering" />
+          <camunda:property name="mailSendTaskSubject" value="Herinnering aanvullen gegevens voor vaststelling vermogen" />
+          <camunda:property name="mailSendTaskTo" value="${burger}" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1qued4o</bpmn:incoming>
+      <bpmn:outgoing>Flow_0fkfujz</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:exclusiveGateway id="Gateway_1d3hph5">
+      <bpmn:incoming>Flow_156ahf8</bpmn:incoming>
+      <bpmn:incoming>Flow_19ryt9n</bpmn:incoming>
+      <bpmn:outgoing>Flow_1vfbxxs</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="Event_1hmayq4">
+      <bpmn:incoming>Flow_0fkfujz</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:userTask id="BeoordeelBewijsstukkenTask" name="Beoordeel bewijsstukken" camunda:candidateGroups="ROLE_USER">
+      <bpmn:extensionElements>
+        <camunda:executionListener expression="${bewijslastNodigService.determineNietToereikend(execution)}" event="end" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1vfbxxs</bpmn:incoming>
+      <bpmn:outgoing>Flow_0v72iyb</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:businessRuleTask id="AdviesVaststellingVermogenTask" name="Advies vaststelling vermogen" camunda:expression="${true}">
+      <bpmn:incoming>Flow_164xke5</bpmn:incoming>
+      <bpmn:outgoing>Flow_09myoxe</bpmn:outgoing>
+    </bpmn:businessRuleTask>
+    <bpmn:boundaryEvent id="Event_0wwtmlv" attachedToRef="LeverenBewijslastTask">
+      <bpmn:outgoing>Flow_09dss0m</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_1y91n8n">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1H</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:boundaryEvent>
+    <bpmn:boundaryEvent id="Event_03yvbii" cancelActivity="false" attachedToRef="LeverenBewijslastTask">
+      <bpmn:outgoing>Flow_1qued4o</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_108vq7c">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT2M</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="Flow_164xke5" sourceRef="Gateway_0wdi6gh" targetRef="AdviesVaststellingVermogenTask" />
+    <bpmn:userTask id="AanvullenGegevensTask" name="Aanvullen gegevens voor vaststelling vermogen" camunda:assignee="${burger}" camunda:candidateGroups="ROLE_ADMIN">
+      <bpmn:extensionElements>
+        <camunda:executionListener expression="${mailService.sendElementTemplateTaskMail(execution)}" event="start" />
+        <camunda:properties>
+          <camunda:property name="mailSendTaskAttachments" />
+          <camunda:property name="mailSendTaskFrom" value="valtimo@ritense.com" />
+          <camunda:property name="mailSendTaskTemplate" value="aanvullen-gegevens-voor-vaststelling-vermogen" />
+          <camunda:property name="mailSendTaskSubject" value="Aanvullen gegevens voor vaststelling vermogen" />
+          <camunda:property name="mailSendTaskTo" value="${burger}" />
+        </camunda:properties>
+        <camunda:executionListener expression="${vermogensComponentService.addEmptyArrayToDocument(execution)}" event="start" />
+        <camunda:executionListener expression="${vermogensComponentService.addVermogensComponents(execution, &#34;Burger&#34;)}" event="end" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1ckj9al</bpmn:incoming>
+      <bpmn:outgoing>Flow_09nljtm</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:boundaryEvent id="Event_1apqujp" cancelActivity="false" attachedToRef="AanvullenGegevensTask">
+      <bpmn:outgoing>Flow_0ziyakd</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_1wwzgvl">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT2M</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:boundaryEvent>
+    <bpmn:boundaryEvent id="Event_0335wda" attachedToRef="AanvullenGegevensTask">
+      <bpmn:outgoing>Flow_02svovg</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_14qmrq0">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT4M</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:boundaryEvent>
+    <bpmn:endEvent id="VermogenNietVastTeStellenEndEvent" name="Vermogen niet vast te stellen">
+      <bpmn:incoming>NeeSequenceFlow</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="VermogenVastgesteldEndEvent" name="Vermogen vastgesteld">
+      <bpmn:extensionElements>
+        <camunda:executionListener expression="${execution.setVariable(&#34;documentIdAanvraag&#34;,documentVariableDelegate.findValueByJsonPointer(&#34;/burger/documentIdAanvraag&#34;,execution))}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1094pl9</bpmn:incoming>
+      <bpmn:signalEventDefinition id="SignalEventDefinition_1bd6j6e" signalRef="Signal_18j1u1b" />
+    </bpmn:endEvent>
+    <bpmn:textAnnotation id="TextAnnotation_0qorrap">
+      <bpmn:text>5 dagen</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:textAnnotation id="TextAnnotation_1bhl2th">
+      <bpmn:text>5 dagen</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:textAnnotation id="TextAnnotation_0ce2xdi">
+      <bpmn:text>2 weken</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_0ccxvyd" sourceRef="Event_0wwtmlv" targetRef="TextAnnotation_0ce2xdi" />
+    <bpmn:association id="Association_1hsmw1d" sourceRef="Event_03yvbii" targetRef="TextAnnotation_1bhl2th" />
+    <bpmn:association id="Association_0tstqbi" sourceRef="Event_1apqujp" targetRef="TextAnnotation_0qorrap" />
+    <bpmn:association id="Association_1f2kbc4" sourceRef="Event_0335wda" targetRef="TextAnnotation_0w4vmoz" />
+    <bpmn:textAnnotation id="TextAnnotation_0w4vmoz">
+      <bpmn:text>2 weken</bpmn:text>
+    </bpmn:textAnnotation>
+  </bpmn:process>
+  <bpmn:message id="Message_1favh18" name="Message_0jdeamd" />
+  <bpmn:message id="Message_1ijf08e" name="Message_0jkirgp" />
+  <bpmn:signal id="Signal_18j1u1b" name="vermogen-vastgesteld-${documentIdAanvraag}" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1yliuxr">
+      <bpmndi:BPMNShape id="Participant_1do5b7s_di" bpmnElement="VaststellingVermogenParticipant" isHorizontal="true">
+        <dc:Bounds x="152" y="84" width="1805" height="826" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_1lw18z3_di" bpmnElement="ProfessionalLane" isHorizontal="true">
+        <dc:Bounds x="182" y="84" width="1775" height="416" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_08737z5_di" bpmnElement="BurgerLane" isHorizontal="true">
+        <dc:Bounds x="182" y="500" width="1775" height="410" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_164xke5_di" bpmnElement="Flow_164xke5">
+        <di:waypoint x="750" y="545" />
+        <di:waypoint x="750" y="235" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0fkfujz_di" bpmnElement="Flow_0fkfujz">
+        <di:waypoint x="1317" y="830" />
+        <di:waypoint x="1362" y="830" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1qued4o_di" bpmnElement="Flow_1qued4o">
+        <di:waypoint x="1167" y="763" />
+        <di:waypoint x="1167" y="830" />
+        <di:waypoint x="1217" y="830" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1sr542n_di" bpmnElement="Flow_1sr542n">
+        <di:waypoint x="662" y="830" />
+        <di:waypoint x="702" y="830" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ziyakd_di" bpmnElement="Flow_0ziyakd">
+        <di:waypoint x="480" y="763" />
+        <di:waypoint x="480" y="830" />
+        <di:waypoint x="562" y="830" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1mtap8d_di" bpmnElement="NeeSequenceFlow">
+        <di:waypoint x="1547" y="220" />
+        <di:waypoint x="1547" y="334" />
+        <di:waypoint x="1839" y="334" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1556" y="258" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0x13ve6_di" bpmnElement="JaSequenceFlow">
+        <di:waypoint x="1572" y="195" />
+        <di:waypoint x="1667" y="195" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1601" y="177" width="12" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0v72iyb_di" bpmnElement="Flow_0v72iyb">
+        <di:waypoint x="1412" y="390" />
+        <di:waypoint x="1412" y="345" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_156ahf8_di" bpmnElement="Flow_156ahf8">
+        <di:waypoint x="1267" y="705" />
+        <di:waypoint x="1412" y="705" />
+        <di:waypoint x="1412" y="595" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1094pl9_di" bpmnElement="Flow_1094pl9">
+        <di:waypoint x="1767" y="195" />
+        <di:waypoint x="1839" y="195" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1odk6a4_di" bpmnElement="Flow_1odk6a4">
+        <di:waypoint x="1437" y="195" />
+        <di:waypoint x="1522" y="195" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ddinho_di" bpmnElement="NeeSequenceFlow1">
+        <di:waypoint x="1107" y="195" />
+        <di:waypoint x="1387" y="195" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1141" y="177" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ce723h_di" bpmnElement="Flow_1ce723h">
+        <di:waypoint x="982" y="195" />
+        <di:waypoint x="1057" y="195" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09myoxe_di" bpmnElement="Flow_09myoxe">
+        <di:waypoint x="810" y="195" />
+        <di:waypoint x="882" y="195" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0o1vhwp_di" bpmnElement="Flow_0o1vhwp">
+        <di:waypoint x="300" y="195" />
+        <di:waypoint x="382" y="195" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1poqgpj_di" bpmnElement="JaSequenceFlow1">
+        <di:waypoint x="1082" y="220" />
+        <di:waypoint x="1082" y="295" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1090" y="244" width="12" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09nljtm_di" bpmnElement="Flow_09nljtm">
+        <di:waypoint x="580" y="705" />
+        <di:waypoint x="750" y="705" />
+        <di:waypoint x="750" y="595" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ckj9al_di" bpmnElement="Flow_1ckj9al">
+        <di:waypoint x="432" y="235" />
+        <di:waypoint x="432" y="705" />
+        <di:waypoint x="480" y="705" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02svovg_di" bpmnElement="Flow_02svovg">
+        <di:waypoint x="580" y="647" />
+        <di:waypoint x="580" y="629" />
+        <di:waypoint x="612" y="629" />
+        <di:waypoint x="612" y="610" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1xl8nyz_di" bpmnElement="Flow_1xl8nyz">
+        <di:waypoint x="662" y="570" />
+        <di:waypoint x="725" y="570" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09dss0m_di" bpmnElement="Flow_09dss0m">
+        <di:waypoint x="1267" y="647" />
+        <di:waypoint x="1267" y="610" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1vfbxxs_di" bpmnElement="Flow_1vfbxxs">
+        <di:waypoint x="1412" y="545" />
+        <di:waypoint x="1412" y="470" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_19ryt9n_di" bpmnElement="Flow_19ryt9n">
+        <di:waypoint x="1317" y="570" />
+        <di:waypoint x="1387" y="570" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0wyz25k_di" bpmnElement="JaSequenceFlow2">
+        <di:waypoint x="1412" y="295" />
+        <di:waypoint x="1412" y="220" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1421" y="258" width="12" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_10dmagn_di" bpmnElement="Flow_10dmagn">
+        <di:waypoint x="1082" y="345" />
+        <di:waypoint x="1082" y="705" />
+        <di:waypoint x="1167" y="705" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0stttyt_di" bpmnElement="NeeSequenceFlow2">
+        <di:waypoint x="1387" y="320" />
+        <di:waypoint x="1107" y="320" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1339" y="302" width="21" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_0z8oocy_di" bpmnElement="OphalenVoertuigenObvBSNTask">
+        <dc:Bounds x="382" y="155" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1akf2y6_di" bpmnElement="RegistreerTimerTask">
+        <dc:Bounds x="562" y="530" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0lurjln_di" bpmnElement="VerstuurTaakHerrinneringTask">
+        <dc:Bounds x="562" y="790" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0wdi6gh_di" bpmnElement="Gateway_0wdi6gh" isMarkerVisible="true">
+        <dc:Bounds x="725" y="545" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_16k4v4r_di" bpmnElement="Event_16k4v4r">
+        <dc:Bounds x="702" y="812" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_031wjjj_di" bpmnElement="VaststellingVermogenStartEvent">
+        <dc:Bounds x="264" y="177" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="271" y="220" width="23" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1dozt8r_di" bpmnElement="BeoordeelAdviesTask">
+        <dc:Bounds x="882" y="155" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_088fwpg_di" bpmnElement="BewijslastNodigGateway" isMarkerVisible="true">
+        <dc:Bounds x="1057" y="170" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1040" y="146" width="85" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1qinulf_di" bpmnElement="Gateway_1qinulf" isMarkerVisible="true">
+        <dc:Bounds x="1387" y="170" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0vdce4v_di" bpmnElement="AanleveringCompleetGateway" isMarkerVisible="true">
+        <dc:Bounds x="1522" y="170" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1518" y="139" width="59" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_14lc46o_di" bpmnElement="VaststellenVermogenTask">
+        <dc:Bounds x="1667" y="155" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0bqffva_di" bpmnElement="AanleveringToereikendGateway" isMarkerVisible="true">
+        <dc:Bounds x="1387" y="295" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1447" y="306.5" width="59" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0k01icb_di" bpmnElement="Gateway_0k01icb" isMarkerVisible="true">
+        <dc:Bounds x="1057" y="295" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ac5nbi_di" bpmnElement="LeverenBewijslastTask">
+        <dc:Bounds x="1167" y="665" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1k6aaml_di" bpmnElement="RegistreerTimerTask1">
+        <dc:Bounds x="1217" y="530" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0q8dfch_di" bpmnElement="VerstuurTaakHerrinneringTask1">
+        <dc:Bounds x="1217" y="790" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1d3hph5_di" bpmnElement="Gateway_1d3hph5" isMarkerVisible="true">
+        <dc:Bounds x="1387" y="545" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1hmayq4_di" bpmnElement="Event_1hmayq4">
+        <dc:Bounds x="1362" y="812" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0kpkie2_di" bpmnElement="BeoordeelBewijsstukkenTask">
+        <dc:Bounds x="1362" y="390" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1qgph9j_di" bpmnElement="AdviesVaststellingVermogenTask">
+        <dc:Bounds x="710" y="155" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0wqm2k6_di" bpmnElement="AanvullenGegevensTask">
+        <dc:Bounds x="480" y="665" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1xrwi9p_di" bpmnElement="VermogenNietVastTeStellenEndEvent" bioc:stroke="#E53935" bioc:fill="#FFCDD2">
+        <dc:Bounds x="1839" y="316" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1822" y="359" width="71" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1v0z60q_di" bpmnElement="VermogenVastgesteldEndEvent" bioc:stroke="#43A047" bioc:fill="#C8E6C9">
+        <dc:Bounds x="1839" y="177" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1830" y="220" width="56" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0qorrap_di" bpmnElement="TextAnnotation_0qorrap">
+        <dc:Bounds x="440" y="780" width="60" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_1bhl2th_di" bpmnElement="TextAnnotation_1bhl2th">
+        <dc:Bounds x="1100" y="780" width="55" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0ce2xdi_di" bpmnElement="TextAnnotation_0ce2xdi">
+        <dc:Bounds x="1320" y="640" width="60" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0w4vmoz_di" bpmnElement="TextAnnotation_0w4vmoz">
+        <dc:Bounds x="670" y="640" width="57" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_19751is_di" bpmnElement="Event_0335wda" bioc:stroke="#E53935" bioc:fill="#FFCDD2">
+        <dc:Bounds x="562" y="647" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0vjyjqa_di" bpmnElement="Event_1apqujp" bioc:stroke="#FB8C00" bioc:fill="#FFE0B2">
+        <dc:Bounds x="462" y="727" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_11ifilq_di" bpmnElement="Event_03yvbii" bioc:stroke="#FB8C00" bioc:fill="#FFE0B2">
+        <dc:Bounds x="1149" y="727" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0xdh5u7_di" bpmnElement="Event_0wwtmlv" bioc:stroke="#E53935" bioc:fill="#FFCDD2">
+        <dc:Bounds x="1249" y="647" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_0ccxvyd_di" bpmnElement="Association_0ccxvyd">
+        <di:waypoint x="1285" y="662" />
+        <di:waypoint x="1320" y="657" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_1hsmw1d_di" bpmnElement="Association_1hsmw1d">
+        <di:waypoint x="1154" y="757" />
+        <di:waypoint x="1128" y="780" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_0tstqbi_di" bpmnElement="Association_0tstqbi">
+        <di:waypoint x="475" y="762" />
+        <di:waypoint x="470" y="780" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_1f2kbc4_di" bpmnElement="Association_1f2kbc4">
+        <di:waypoint x="598" y="663" />
+        <di:waypoint x="670" y="655" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
